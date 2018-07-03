@@ -4,21 +4,9 @@ import click
 import vcf
 
 from cli.cli import pass_context
-from tabby import fields, Schema
 from pprint import pprint as pp
+from cli.lib.pbopen import pbopen
 
-
-class CsVFileSchema(Schema):
-    pos_h37rv = fields.IntField('position in H37Rv')
-    gene_name = fields.StringField('gene')
-    short_name = fields.StringField('short name')
-    snp_type = fields.StringField('snp_type')
-    ref_h37rv = fields.StringField('H37Rv')
-
-    #Sample snps
-    sawc_507 = fields.StringField('SAWC-507')
-    sawc_5218 = fields.StringField('SAWC-5218')
-    sawc_5527 = fields.StringField('SAWC-5527')
 
 @click.command('intersect', short_help='Intersect SNPs with a CSV file.')
 @click.argument('vcffiles', nargs=-1, type=click.Path(exists=True))
@@ -43,47 +31,58 @@ def cli(ctx, vcffiles, csvfile):
        CombatTB home page: <http://www.combattb.org/software/tools/>
        General help using CombatTB software: <http://www.combattb.org/gethelp/>
        """
+
     # The files involved as input to the program.
     for vcffile in vcffiles:
         ctx.log('Input VCF FILE: ' + click.format_filename(vcffile))
     ctx.log('Input CSV FILE: ' + click.format_filename(csvfile))
 
     # Get the Reference - Rows (list of dicts)
-    reference_rows = get_reference_rows(csvfile)
+    ref_rows = get_ref_rows(csvfile)
     vcf_rows = get_vcf_rows(vcffiles)
 
-    # plot the intersects
-    intersect_list = []
-    for ref_dict in reference_rows:
-        #pp(vcf_rows)
-        #pp(ref_dict)
-        #exit(0)
-        intersect_list.append(dict(vcf=filter(lambda intersect_dict: intersect_dict['pos'] == ref_dict['pos_h37rv'], vcf_rows),csv=ref_dict))
+    # group by position - intersects
+    result = [dict(vcf=[fil for fil in filter(lambda sect_dict: sect_dict['pos'] == int(ref_dict['H37Rv_POS']), vcf_rows)],
+                   csv=ref_dict) for ref_dict in ref_rows]
+    pp(result)
 
-    pp(intersect_list)
-    #find_intersect(ref_dict['pos_h37rv'], vcf_rows)
 
-def get_reference_rows(csvfile):
-    # data structure to store csv snps - reference point
-    with open(csvfile, 'r') as f:
-        file_rows = csv.reader(f)
-        rows = list(CsVFileSchema.process(file_rows))
+def get_ref_rows(csvfile):
+    with pbopen(csvfile) as f:
+        file_rows = csv.DictReader(f)
+        rows = [r for r in file_rows]
     return rows
 
+
 def get_vcf_rows(vcffiles):
-    vcf_dict_list = []
     for vcffile in vcffiles:
-        with open(click.format_filename(vcffile), 'r') as f:
+        with pbopen(click.format_filename(vcffile)) as f:
             vcf_rows = vcf.Reader(f)
-            for vcf_row in vcf_rows:
-                vcf_dict_list.append(dict(pos=vcf_row.POS, ref=vcf_row.REF, snp=vcf_row.ALT,
-                                          snp_status=vcf_row.is_snp, indel_status=vcf_row.is_indel))
+            vcf_dict_list = [dict(pos=vcf_row.POS, ref=vcf_row.REF, snp=vcf_row.ALT,
+                                  snp_status=vcf_row.is_snp, indel_status=vcf_row.is_indel) for vcf_row in vcf_rows]
     return vcf_dict_list
 
 
-# Final - Output
-# [{
-#    'vcf': [{},{}],
-#    'csv': {}
-# }]
-# self.ALT == getattr(other, "ALT", None))
+def f_results(result):
+    r_l = []
+    for r in result:
+        for rl in r['vcf']:
+            if rl['ref'] == r['csv']['H37Rv']:
+                r_l.append(dict(pos=rl['pos'], h37rv=rl['ref'], vcf=rl['snp'], snp=rl['snp_status'], indel=rl['indel_status']))
+    return r_l
+#
+# [{'h37rv': 'G', 'indel': False, 'pos': 1285, 'snp': False, 'vcf': [A, <*>]},
+#  {'h37rv': 'G', 'indel': False, 'pos': 1285, 'snp': False, 'vcf': [A, T, <*>]},
+#  {'h37rv': 'G', 'indel': False, 'pos': 1285, 'snp': False, 'vcf': [T, A, <*>]},
+#  {'h37rv': 'T', 'indel': False, 'pos': 4013, 'snp': True, 'vcf': [C]},
+#  {'h37rv': 'T', 'indel': False, 'pos': 4013, 'snp': False, 'vcf': [C, <*>]},
+#  {'h37rv': 'G', 'indel': False, 'pos': 15890, 'snp': 7, 'vcf': [A, <*>]},
+#  {'h37rv': 'A', 'indel': False, 'pos': 37334, 'snp': True, 'vcf': [T]},
+#  {'h37rv': 'A', 'indel': False, 'pos': 37334, 'snp': False, 'vcf': [T, <*>]},
+#  {'h37rv': 'T', 'indel': False, 'pos': 43347, 'snp': False, 'vcf': [G, <*>]},
+#  {'h37rv': 'T', 'indel': False, 'pos': 45753, 'snp': False, 'vcf': [<*>]},
+#  {'h37rv': 'A', 'indel': False, 'pos': 66604, 'snp': False, 'vcf': [<*>]},
+#  {'h37rv': 'G', 'indel': False, 'pos': 109192, 'snp': False, 'vcf': [<*>]},
+#  {'h37rv': 'C', 'indel': False, 'pos': 128357, 'snp': False, 'vcf': [<*>]},
+#  {'h37rv': 'G', 'indel': False, 'pos': 138419, 'snp': False, 'vcf': [<*>]},
+#  {'h37rv': 'G', 'indel': False, 'pos': 141623, 'snp': True, 'vcf': [A]},

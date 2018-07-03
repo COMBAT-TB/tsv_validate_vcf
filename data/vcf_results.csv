@@ -1,4 +1,4 @@
-position in H37Rv,gene,short name,snp_type,H37Rv,SAWC-507,SAWC-5218,SAWC-5527
+H37Rv_POS,gene,short_name,snp_type,H37Rv,SAWC-507,SAWC-5218,SAWC-5527
 1285,dnaA,dnaA1285,nsSNP,G,G,G,G
 4013,recF,recF4013,nsSNP,T,C,C,C
 15890,pknB,pknB15890,silent,G,G,G,G
