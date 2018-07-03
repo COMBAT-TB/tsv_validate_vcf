@@ -1,7 +1,33 @@
+backcall==0.1.0
 click==6.7
+cycler==0.10.0
+decorator==4.3.0
 fields==5.0.0
+ipython==6.4.0
+ipython-genutils==0.2.0
+jedi==0.12.1
+kiwisolver==1.0.1
+matplotlib==2.2.2
+numpy==1.14.5
+pandas==0.23.1
+parso==0.3.0
+pexpect==4.6.0
+pickleshare==0.7.4
 pkg-resources==0.0.0
+prompt-toolkit==1.0.15
+ptyprocess==0.6.0
+Pygments==2.2.0
+pyparsing==2.2.0
+python-dateutil==2.7.3
+pytz==2018.5
+PyUpSet==0.1.1.post7
 PyVCF==0.6.8
-#Tabby==0.4.0
--e git+https://github.com/signed0/tabby.git@master#egg=tabby
--e git+git@github.com:COMBAT-TB/tsv_validate_vcf.git@9c82c114c7a88e7df550eb0afea1daf5fcea0fe5#egg=vcf_snp_utils
+scikit-allel==1.1.10
+simplegeneric==0.8.1
+six==1.11.0
+Tabby==0.4.0
+tqdm==4.23.4
+traitlets==4.3.2
+UpSetPlot==0.1
+-e git+git@github.com:COMBAT-TB/tsv_validate_vcf.git@13b3cb60b6c68451f6324e4111ad9f2a926f2c46#egg=vcf_snp_utils
+wcwidth==0.1.7
