@@ -1,4 +1,5 @@
 import csv
+import os
 
 import click
 import vcf
@@ -44,6 +45,12 @@ def cli(ctx, vcffiles, csvfile):
     # group by position - intersects
     result = [dict(vcf=[fil for fil in filter(lambda sect_dict: sect_dict['pos'] == int(ref_dict['H37Rv_POS']), vcf_rows)],
                    csv=ref_dict) for ref_dict in ref_rows]
+
+    #Sample Names in the CSV
+    sampleNameList = [k for k,v in ref_rows[0].items() if k not in ['H37Rv', 'H37Rv_POS', 'gene', 'snp_type', 'short_name', 'gene']]
+
+    res = f_results(result, sampleNameList)
+
     pp(result)
 
 
@@ -58,18 +65,24 @@ def get_vcf_rows(vcffiles):
     for vcffile in vcffiles:
         with pbopen(click.format_filename(vcffile)) as f:
             vcf_rows = vcf.Reader(f)
-            vcf_dict_list = [dict(pos=vcf_row.POS, ref=vcf_row.REF, snp=vcf_row.ALT,
+            vcf_dict_list = [dict(pos=vcf_row.POS, ref=vcf_row.REF, snp=vcf_row.ALT, filename=os.path.basename(vcffile),
+                                  samples=[s.sample for s in vcf_row.samples],
                                   snp_status=vcf_row.is_snp, indel_status=vcf_row.is_indel) for vcf_row in vcf_rows]
     return vcf_dict_list
 
 
-def f_results(result):
+def f_results(result, samples):
     r_l = []
     for r in result:
-        for rl in r['vcf']:
+        f_dict = dict(pos=r['csv']['H37Rv_POS'])
+        for sample in samples:
+            f_dict[sample] = True if r['csv'].get(sample) else False
+        for num, rl in enumerate(r['vcf']):
             if rl['ref'] == r['csv']['H37Rv']:
-                r_l.append(dict(pos=rl['pos'], h37rv=rl['ref'], vcf=rl['snp'], snp=rl['snp_status'], indel=rl['indel_status']))
+                f_dict['{0}_{1}'.format(rl['filename'], num)] = True if str(rl['snp']) != [] else False
+        r_l.append(f_dict)
     return r_l
+
 #
 # [{'h37rv': 'G', 'indel': False, 'pos': 1285, 'snp': False, 'vcf': [A, <*>]},
 #  {'h37rv': 'G', 'indel': False, 'pos': 1285, 'snp': False, 'vcf': [A, T, <*>]},

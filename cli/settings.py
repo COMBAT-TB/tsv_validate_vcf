@@ -1,1 +1,4 @@
-sampleNames="SAWC-507,SAWC-5218,SAWC-5527"
+# -*- coding: utf-8 -*-
+from simple_settings import LazySettings
+
+settings = LazySettings('conf/config.ini')
