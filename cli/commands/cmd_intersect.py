@@ -1,8 +1,10 @@
 import csv
 import os
+from subprocess import call, PIPE
 
 import click
 import vcf
+from pathlib import Path
 
 from cli.cli import pass_context
 from pprint import pprint as pp
@@ -42,16 +44,22 @@ def cli(ctx, vcffiles, csvfile):
     ref_rows = get_ref_rows(csvfile)
     vcf_rows = get_vcf_rows(vcffiles)
 
-    # group by position - intersects
-    result = [dict(vcf=[fil for fil in filter(lambda sect_dict: sect_dict['pos'] == int(ref_dict['H37Rv_POS']), vcf_rows)],
-                   csv=ref_dict) for ref_dict in ref_rows]
+    # Group by position - intersects
+    intersect_result = [
+        dict(vcf=[fil for fil in filter(lambda sect_dict: sect_dict['pos'] == int(ref_dict['H37Rv_POS']), vcf_rows)],
+             csv=ref_dict) for ref_dict in ref_rows]
 
-    #Sample Names in the CSV
-    sampleNameList = [k for k,v in ref_rows[0].items() if k not in ['H37Rv', 'H37Rv_POS', 'gene', 'snp_type', 'short_name', 'gene']]
+    # Refine results
+    results = f_results(intersect_result, [k for k, v in ref_rows[0].items() if
+                                           k not in ['H37Rv', 'H37Rv_POS', 'gene', 'snp_type', 'short_name', 'gene']])
 
-    res = f_results(result, sampleNameList)
+    # Create output files
+    create_output_files(results)
 
-    pp(result)
+    # Trigger the VISUALISATION / PLOTTING output
+    pp("###################### About to generate output / visualisation")
+    call('intervene upset -i output/*.txt --type list --output output/$(date +%Y%m%d_%H%M%S)', shell=True, stdout=PIPE)
+    pp("###################### End!")
 
 
 def get_ref_rows(csvfile):
@@ -65,37 +73,52 @@ def get_vcf_rows(vcffiles):
     for vcffile in vcffiles:
         with pbopen(click.format_filename(vcffile)) as f:
             vcf_rows = vcf.Reader(f)
-            vcf_dict_list = [dict(pos=vcf_row.POS, ref=vcf_row.REF, snp=vcf_row.ALT, filename=os.path.basename(vcffile),
-                                  samples=[s.sample for s in vcf_row.samples],
-                                  snp_status=vcf_row.is_snp, indel_status=vcf_row.is_indel) for vcf_row in vcf_rows]
+            vcf_dict_list = [
+                dict(pos=int(vcf_row.POS), ref=vcf_row.REF, snp=vcf_row.ALT, filename=os.path.basename(vcffile),
+                     samples=[s.sample for s in vcf_row.samples],
+                     snp_status=vcf_row.is_snp, indel_status=vcf_row.is_indel) for vcf_row in vcf_rows]
     return vcf_dict_list
 
 
 def f_results(result, samples):
-    r_l = []
+    result_list = list()
     for r in result:
-        f_dict = dict(pos=r['csv']['H37Rv_POS'])
+        f_dict = dict(pos=int(r['csv']['H37Rv_POS']))
         for sample in samples:
-            f_dict[sample] = True if r['csv'].get(sample) else False
-        for num, rl in enumerate(r['vcf']):
-            if rl['ref'] == r['csv']['H37Rv']:
-                f_dict['{0}_{1}'.format(rl['filename'], num)] = True if str(rl['snp']) != [] else False
-        r_l.append(f_dict)
-    return r_l
+            f_dict[sample] = "POS_{}_FALSE".format(r['csv']['H37Rv_POS']) if (
+            r['csv'].get(sample) == r['csv']['H37Rv']) else "POS_{}_TRUE".format(r['csv']['H37Rv_POS'])
+        for i in range(max([len(v['vcf']) for v in result])):
+            if r['vcf']:
+                try:
+                    record = r['vcf'][i]
+                    f_dict['{0}_pos_picked_{1}'.format(record['filename'], i)] = "POS_{}_{}".format(record['pos'],
+                                                                                                    record[
+                                                                                                        'snp_status'])
+                except IndexError:
+                    # TODO: nothing was found - might need revision
+                    record = r['vcf'][0]
+                    f_dict['{0}_pos_picked_{1}'.format(record['filename'], i)] = 'N/A'
+            else:
+                # TODO: nothing was found - might need revision
+                f_dict['{0}_pos_picked_{1}'.format(get_vcf_file_name(result), i)] = 'N/A'
+        result_list.append(f_dict)
+    return result_list
 
-#
-# [{'h37rv': 'G', 'indel': False, 'pos': 1285, 'snp': False, 'vcf': [A, <*>]},
-#  {'h37rv': 'G', 'indel': False, 'pos': 1285, 'snp': False, 'vcf': [A, T, <*>]},
-#  {'h37rv': 'G', 'indel': False, 'pos': 1285, 'snp': False, 'vcf': [T, A, <*>]},
-#  {'h37rv': 'T', 'indel': False, 'pos': 4013, 'snp': True, 'vcf': [C]},
-#  {'h37rv': 'T', 'indel': False, 'pos': 4013, 'snp': False, 'vcf': [C, <*>]},
-#  {'h37rv': 'G', 'indel': False, 'pos': 15890, 'snp': 7, 'vcf': [A, <*>]},
-#  {'h37rv': 'A', 'indel': False, 'pos': 37334, 'snp': True, 'vcf': [T]},
-#  {'h37rv': 'A', 'indel': False, 'pos': 37334, 'snp': False, 'vcf': [T, <*>]},
-#  {'h37rv': 'T', 'indel': False, 'pos': 43347, 'snp': False, 'vcf': [G, <*>]},
-#  {'h37rv': 'T', 'indel': False, 'pos': 45753, 'snp': False, 'vcf': [<*>]},
-#  {'h37rv': 'A', 'indel': False, 'pos': 66604, 'snp': False, 'vcf': [<*>]},
-#  {'h37rv': 'G', 'indel': False, 'pos': 109192, 'snp': False, 'vcf': [<*>]},
-#  {'h37rv': 'C', 'indel': False, 'pos': 128357, 'snp': False, 'vcf': [<*>]},
-#  {'h37rv': 'G', 'indel': False, 'pos': 138419, 'snp': False, 'vcf': [<*>]},
-#  {'h37rv': 'G', 'indel': False, 'pos': 141623, 'snp': True, 'vcf': [A]},
+
+def create_output_files(results):
+    outputfiles = [k for k, v in results[0].items() if k not in ['pos']]
+    for o in outputfiles:
+        current_file = open("output/{}.txt".format(o), 'w+')
+        for r in results:
+            if str(r[o]) != "N/A":
+                current_file.write("{}\n".format(str(r[o])))
+            else:
+                current_file.write("")
+        current_file.close()
+
+
+def get_vcf_file_name(result):
+    for r in result:
+        if r['vcf']:
+            return (r['vcf'][0]['filename'])
+    return None
