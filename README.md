@@ -23,8 +23,6 @@ __A vcf_snp_utils cli command line interface.__
 
 ## Having Trouble?
 
-You might find some useful hints in this jekyll issue if it's not working as expected: [Issue 503](https://github.com/mojombo/jekyll/issues/503)
-
 Please see the [VCF-SNPS-UTILS Documentation](http://vcf-snps-utils.readthedocs.org) for installation and usage instructions.
 
 ## Credits
