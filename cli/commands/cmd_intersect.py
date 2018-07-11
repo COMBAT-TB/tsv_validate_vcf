@@ -57,7 +57,7 @@ def cli(ctx, vcffiles, csvfile):
     create_output_files(results)
 
     # Trigger the VISUALISATION / PLOTTING output
-    pp("###################### About to generate output / visualisation")
+    pp("###################### About to Generate Output / Visualisation")
     call('intervene upset -i output/*.txt --type list --output output/$(date +%Y%m%d_%H%M%S)', shell=True, stdout=PIPE)
     pp("###################### End!")
 
