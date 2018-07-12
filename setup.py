@@ -38,7 +38,7 @@ setup(
         'requests>=2.19.1',
         'requests-toolbelt>=0.8.0',
         'scipy>=1.1.0',
-        'scikit-allel>=1.1.10',
+        #'scikit-allel>=1.1.10',
         'seaborn>=0.8.1',
         'simple-settings>=0.13.0',
         'simplegeneric>=0.8.1',
