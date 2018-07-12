@@ -1,8 +1,12 @@
 backcall==0.1.0
+certifi==2018.4.16
+chardet==3.0.4
 click==6.7
 cycler==0.10.0
 decorator==4.3.0
 fields==5.0.0
+idna==2.7
+intervene==0.6.4
 ipython==6.4.0
 ipython-genutils==0.2.0
 jedi==0.12.1
@@ -14,20 +18,32 @@ parso==0.3.0
 pexpect==4.6.0
 pickleshare==0.7.4
 pkg-resources==0.0.0
+pkginfo==1.4.2
 prompt-toolkit==1.0.15
 ptyprocess==0.6.0
+pybedtools==0.7.10
 Pygments==2.2.0
 pyparsing==2.2.0
+pysam==0.14.1
 python-dateutil==2.7.3
 pytz==2018.5
 PyUpSet==0.1.1.post7
 PyVCF==0.6.8
+PyYAML==3.12
+requests==2.19.1
+requests-toolbelt==0.8.0
 scikit-allel==1.1.10
+scipy==1.1.0
+seaborn==0.8.1
+simple-settings==0.13.0
 simplegeneric==0.8.1
 six==1.11.0
 Tabby==0.4.0
 tqdm==4.23.4
 traitlets==4.3.2
+twine==1.11.0
 UpSetPlot==0.1
--e git+git@github.com:COMBAT-TB/tsv_validate_vcf.git@13b3cb60b6c68451f6324e4111ad9f2a926f2c46#egg=vcf_snp_utils
+urllib3==1.23
+-e git+git@github.com:COMBAT-TB/tsv_validate_vcf.git@158e486e941d47a98e7540569966638316524d56#egg=vcf_snp_utils
 wcwidth==0.1.7
+yml==0.0.1

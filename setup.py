@@ -15,7 +15,7 @@ setup(
     packages=['cli', 'cli.commands'],
     include_package_data=True,
     install_requires=[
-        'click',
+        'click>=6.7',
     ],
     entry_points='''
         [console_scripts]
