@@ -25,7 +25,7 @@ setup(
         'jedi>=0.12.1',
         'matplotlib',
         'numpy>=1.14.5',
-        'pandas>=0.23.1',
+        'pandas>=0.23.3',
         'pybedtools>=0.7.10',
         'Pygments>=2.2.0',
         'pyparsing>=2.2.0',
