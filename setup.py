@@ -24,10 +24,10 @@ setup(
         'idna>=2.7',
         'intervene>=0.6.4',
         'jedi>=0.12.1',
-        'matplotlib>=2.2.2',
-        'numpy>=1.14.5',
-        'pandas>=0.23.3',
-        'pathlib>=1.0.1'
+        'matplotlib>=2.2.1',
+        'numpy>=1.14.4',
+        'pandas>=0.23.2',
+        'pathlib>=1.0.0'
         'pybedtools>=0.7.10',
         'Pygments>=2.2.0',
         'pyparsing>=2.2.0',
