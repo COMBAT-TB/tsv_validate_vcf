@@ -8,8 +8,7 @@ from pathlib import Path
 
 from cli.cli import pass_context
 from pprint import pprint as pp
-from cli.lib.pbopen import pbopen
-
+from cli.commands.util import pbopen
 
 @click.command('intersect', short_help='Intersect SNPs with a CSV file.')
 @click.argument('vcffiles', nargs=-1, type=click.Path(exists=True))

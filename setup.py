@@ -8,6 +8,7 @@ setup(
     version='1.0.0',
     author="Zipho Mashologu",
     author_email="zipho@sanbi.ac.za",
+    license='Apache License 2.0',
     description="Custom command line utility tools to manipulate vcf files",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -49,8 +50,18 @@ setup(
         'UpSetPlot>=0.1',
         'urllib3>=1.23'
     ],
+    classifiers=[
+        'Development Status :: 3 - Production/Stable',
+        'Environment :: Console',
+        'Intended Audience :: Bioinformaticians',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 3',
+        'Topic :: Software Development :: Libraries',
+        'Topic :: System :: Research'
+    ],
     entry_points='''
         [console_scripts]
-        vcf_snp_utils=cli.cli:cli
+        vcf_snps_utils=cli.cli:cli
     ''',
 )

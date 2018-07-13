@@ -1,1 +1,1 @@
-name = "vcf_snp_utils"
+name = "vcf_snps_utils"
