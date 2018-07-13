@@ -1,0 +1,12 @@
+*.pyc
+*.pyo
+__pycache__/
+build/
+dist/
+develop-eggs/
+*.egg-info/
+.pydevproject
+virtualenvs/
+vcf_snps_utils/
+.idea/
+data/*
