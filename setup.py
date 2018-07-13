@@ -34,7 +34,7 @@ setup(
         # 'pysam>=0.14.1',
         # 'python-dateutil>=2.7.3',
         # 'pytz>=2018.5',
-        'PyUpSet>=0.1.1.post7',
+        #'PyUpSet>=0.1.1.post7',
         'PyVCF>=0.6.8',
         # 'PyYAML>=3.12',
         # 'requests>=2.19.1',
@@ -47,7 +47,7 @@ setup(
         # 'six>=1.11.0',
         'tqdm>=4.23.4',
         # 'traitlets>=4.3.2',
-        'UpSetPlot>=0.1',
+        #'UpSetPlot>=0.1',
         # 'urllib3>=1.23'
     ],
     classifiers=[
