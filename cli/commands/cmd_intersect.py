@@ -3,6 +3,7 @@ import os
 from subprocess import call, PIPE
 
 import click
+import time
 import vcf
 from pathlib import Path
 
@@ -10,11 +11,13 @@ from cli.cli import pass_context
 from pprint import pprint as pp
 from cli.commands.util import pbopen
 
+
 @click.command('intersect', short_help='Intersect SNPs with a CSV file.')
 @click.argument('vcffiles', nargs=-1, type=click.Path(exists=True))
 @click.argument('csvfile', type=click.Path(exists=True))
+@click.option('--out', default="/tmp/vcf_snps_utils_output", help='set the output directory, default is "/tmp/vcf_snps_utils_output/"')
 @pass_context
-def cli(ctx, vcffiles, csvfile):
+def cli(ctx, out, vcffiles, csvfile):
     """VCF snp intersect tool (CSV file).
 
        This tools compares CSV snps to the VCF snps
@@ -56,9 +59,13 @@ def cli(ctx, vcffiles, csvfile):
     create_output_files(results)
 
     # Trigger the VISUALISATION / PLOTTING output
-    pp("###################### About to Generate Output / Visualisation")
-    call('intervene upset -i output/*.txt --type list --output output/$(date +%Y%m%d_%H%M%S)', shell=True, stdout=PIPE)
-    pp("###################### End!")
+    ctx.log("###################### About to Generate Output / Visualisation")
+    output = out + "/" + time.strftime("%Y%m%d-%H%M%S")
+    call('intervene upset -i output/*.txt --type list --output {}'.format(output), shell=True, stdout=PIPE)
+    ctx.log("###################### End!")
+
+    # Generate Pandas for Stats on the results
+
 
 
 def get_ref_rows(csvfile):
@@ -69,9 +76,11 @@ def get_ref_rows(csvfile):
 
 
 def get_vcf_rows(vcffiles):
+    pp(vcffiles)
     for vcffile in vcffiles:
         with pbopen(click.format_filename(vcffile)) as f:
             vcf_rows = vcf.Reader(f)
+            pp(vcffile)
             vcf_dict_list = [
                 dict(pos=int(vcf_row.POS), ref=vcf_row.REF, snp=vcf_row.ALT, filename=os.path.basename(vcffile),
                      samples=[s.sample for s in vcf_row.samples],
@@ -91,8 +100,7 @@ def f_results(result, samples):
                 try:
                     record = r['vcf'][i]
                     f_dict['{0}_pos_picked_{1}'.format(record['filename'], i)] = "POS_{}_{}".format(record['pos'],
-                                                                                                    record[
-                                                                                                        'snp_status'])
+                                                                                                    record['snp_status'].upper())
                 except IndexError:
                     # TODO: nothing was found - might need revision
                     record = r['vcf'][0]

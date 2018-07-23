@@ -10,3 +10,6 @@ virtualenvs/
 vcf_snps_utils/
 .idea/
 data/*
+releases/
+output/
+.Rhistory
