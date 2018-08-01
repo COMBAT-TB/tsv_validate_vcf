@@ -2,7 +2,6 @@
 {% set version = "0.0.1" %}
 {% set sha256 = "0b1f168bfd25b08e2fb3e43c7182e0ff7a61f8b684a4133c0b119e79db805a18" %}
 {% set intervene = "0.6.4" %}
-{% set pathlib = "1.0.0" %}
 {% set pybedtools = "0.7.10" %}
 {% set pyvcf = "0.6.8" %}
 {% set scipy = "1.1.0" %}
@@ -32,10 +31,10 @@ requirements:
     - pip
     - click
     - intervene {{ intervene }}
-    - matplotlib {{ matplotlib }}
+    - matplotlib
     - numpy
     - pandas
-    - pathlib {{ pathlib }}
+    - pathlib
     - pybedtools {{ pybedtools }}
     - PyVCF {{ pyvcf }}
     - scipy {{ scipy }}
@@ -44,10 +43,10 @@ requirements:
     - python
     - click
     - intervene {{ intervene }}
-    - matplotlib {{ matplotlib }}
+    - matplotlib
     - numpy
     - pandas
-    - pathlib {{ pathlib }}
+    - pathlib
     - pybedtools {{ pybedtools }}
     - PyVCF {{ pyvcf }}
     - scipy {{ scipy }}
@@ -62,6 +61,6 @@ test:
 about:
   home: https://github.com/COMBAT-TB/{{ name }}
   license: Apache License 2.0
-  license_family: Apache License
+  license_family: APACHE
   license_file: LICENSE
   summary: 'Custom command line utility tools to manipulate vcf files'

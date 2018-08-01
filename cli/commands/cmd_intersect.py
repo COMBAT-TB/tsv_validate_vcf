@@ -100,7 +100,7 @@ def f_results(result, samples):
                 try:
                     record = r['vcf'][i]
                     f_dict['{0}_pos_picked_{1}'.format(record['filename'], i)] = "POS_{}_{}".format(record['pos'],
-                                                                                                    record['snp_status'].upper())
+                                                                                                    str(record['snp_status']).upper())
                 except IndexError:
                     # TODO: nothing was found - might need revision
                     record = r['vcf'][0]
