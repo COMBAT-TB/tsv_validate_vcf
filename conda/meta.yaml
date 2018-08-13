@@ -1,5 +1,5 @@
 {% set name = "vcf_snps_utils" %}
-{% set version = "0.0.1" %}
+{% set version = "0.0.2" %}
 {% set sha256 = "0b1f168bfd25b08e2fb3e43c7182e0ff7a61f8b684a4133c0b119e79db805a18" %}
 {% set intervene = "0.6.4" %}
 {% set pybedtools = "0.7.10" %}
@@ -39,6 +39,9 @@ requirements:
     - PyVCF {{ pyvcf }}
     - scipy {{ scipy }}
     - tqdm {{ tqdm }}
+    - r-upsetr
+    - r-corrplot
+    - r-cairo
   run:
     - python
     - click
@@ -51,6 +54,9 @@ requirements:
     - PyVCF {{ pyvcf }}
     - scipy {{ scipy }}
     - tqdm {{ tqdm }}
+    - r-upsetr
+    - r-corrplot
+    - r-cairo
 
 test:
   imports:
