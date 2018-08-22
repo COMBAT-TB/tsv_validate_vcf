@@ -1,0 +1,9 @@
+{% extends "base.html" %} {% block content %}{% endblock %} {% block tr %} {% for item in data %}
+<tr>
+    <td> Visualisation </td>
+    <td>
+        <a target="_blank" href="{{ item }}/Intervene_upset.pdf">PDF Report: {{ item }}</a>
+        <a target="_blank" href="{{ item }}/Intervene_upset_combinations.txt">TEXT Report {{ item }}</a>
+    </td>
+</tr>
+{% endfor %} {% endblock %}
