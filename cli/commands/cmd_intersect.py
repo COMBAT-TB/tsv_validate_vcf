@@ -70,7 +70,7 @@ def cli(ctx, outdir, vcffiles, csvfile):
                                                          'gene']])
 
         # Create output files
-        if not os.path.exists(outdir):
+        if not os.path.exists(outdir + '/vcf'):
             os.makedirs(outdir + '/vcf')
         create_output_files(results, outdir, ref_samples)
 

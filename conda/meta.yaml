@@ -1,7 +1,6 @@
 {% set name = "vcf_snps_utils" %}
-{% set version = "0.0.2" %}
-#{% set sha256 = "0b1f168bfd25b08e2fb3e43c7182e0ff7a61f8b684a4133c0b119e79db805a18" %}
-{% set sha256 = "75cef844912ddc4be9038e6724df0fad2f6408038a8239a92587512bbc8d9a4c" %}
+{% set version = "v0.0.3-beta" %}
+{% set sha256 = "05f6740f48c5e96aa260c1a3c84f1f697e3c5fb4da2d9ba46ada39bbd09ca261" %}
 {% set intervene = "0.6.4" %}
 {% set pybedtools = "0.7.10" %}
 {% set pyvcf = "0.6.8" %}
@@ -44,6 +43,8 @@ requirements:
     - r-corrplot
     - r-cairo
     - ncurses
+    - jinja2
+    - libiconv
   run:
     - python
     - click
@@ -60,6 +61,8 @@ requirements:
     - r-corrplot
     - r-cairo
     - ncurses
+    - jinja2
+    - libiconv
 
 test:
   imports:

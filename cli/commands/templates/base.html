@@ -16,25 +16,15 @@
 <body>
 <main role="main" class="container">
     <h1 class="mt-5">
-        {{ file_name }} Report
+        {{ filename }} Report 
     </h1>
     <hr> {% block content %} {% endblock %}
     <div class="row justify-content-center align-items-center">
         <table id="example" class="table table-bordered table-striped table-hover table-sm" cellspacing="0">
             <thead class="thead-light">
             <tr>
-                <th scope="col">CHR</th>
-                <th scope="col">GENE</th>
-                <th scope="col">IDENTIFIER</th>
-                <th scope="col">PRODUCT</th>
-                <th scope="col">TYPE</th>
-                <th scope="col">ANNOTATION</th>
-                <th scope="col">POS</th>
-                <th scope="col">REF</th>
-                <th scope="col">ALT</th>
-                <th scope="col">CONSEQUENCE</th>
-                <th scope="col">IMPACT</th>
-                <th scope="col">PATHWAY</th>
+                <th scope="col">Sample</th>
+                <th scope="col">Report</th>
             </tr>
             </thead>
             <tbody>
@@ -42,18 +32,8 @@
             </tbody>
             <tfoot class="thead-light">
             <tr>
-                <th scope="col">CHR</th>
-                <th scope="col">GENE</th>
-                <th scope="col">IDENTIFIER</th>
-                <th scope="col">PRODUCT</th>
-                <th scope="col">TYPE</th>
-                <th scope="col">ANNOTATION</th>
-                <th scope="col">POS</th>
-                <th scope="col">REF</th>
-                <th scope="col">ALT</th>
-                <th scope="col">CONSEQUENCE</th>
-                <th scope="col">IMPACT</th>
-                <th scope="col">PATHWAY</th>
+                <th scope="col">Sample</th>
+                <th scope="col">Report</th>
             </tr>
             </tfoot>
         </table>
